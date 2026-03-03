@@ -1,6 +1,6 @@
 CXX      := g++
 CXXFLAGS := -Wall -Wextra -std=c++17 -Isrc
-TARGET   := ode_solver
+TARGET   := ode_solver.exe
 SRC_DIR  := src
 OBJ_DIR  := obj
 
