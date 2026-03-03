@@ -1,29 +1,23 @@
-# The compiler to use
-CXX = g++
+CXX      := g++
+CXXFLAGS := -Wall -Wextra -std=c++17 -Isrc
+TARGET   := ode_solver
+SRC_DIR  := src
+OBJ_DIR  := obj
 
-# Compiler flags (Warnings enabled, C++17 standard)
-CXXFLAGS = -Wall -std=c++17 -I.
+# Only looks inside src/ for .cpp files
+SRCS     := $(shell find $(SRC_DIR) -name '*.cpp')
+OBJS     := $(SRCS:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
 
-# The name of your final executable
-TARGET = solver
-
-# Find all .cpp files in the current dir and the euler subdir
-SRCS = main.cpp $(wildcard euler/*.cpp)
-
-# Generate a list of .o (object) files from the .cpp files
-OBJS = $(SRCS:.cpp=.o)
-
-# The default rule: build the target
 all: $(TARGET)
 
-# Link the object files to create the executable
 $(TARGET): $(OBJS)
-	$(CXX) $(CXXFLAGS) -o $(TARGET) $(OBJS)
+	$(CXX) $(CXXFLAGS) -o $@ $^
 
-# Rule to compile .cpp files into .o files
-%.o: %.cpp
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
+	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-# Clean up the build files
 clean:
-	rm -f $(OBJS) $(TARGET)
+	rm -rf $(OBJ_DIR) $(TARGET)
+
+.PHONY: all clean
